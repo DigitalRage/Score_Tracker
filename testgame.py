@@ -1,126 +1,94 @@
 import pygame
-import math
 import random
+import time
 
-# --- SETTINGS ---
-WIDTH, HEIGHT = 1100, 800
-WORLD_SIZE = 3000  # Total playable area
-FPS = 60
-SNAKE_COLOR = (0, 255, 200)
-FOOD_COLOR = (255, 50, 150)
-BG_COLOR = (5, 5, 12)
 
 pygame.init()
+
+
+WIDTH, HEIGHT = 800, 600
+SNAKE_SIZE = 20
+SPEED = 10
+
+
+WHITE = (255, 255, 255)
+GREEN = (0, 255, 0)
+RED = (213, 50, 80)
+BLACK = (0, 0, 0)
+
+
 screen = pygame.display.set_mode((WIDTH, HEIGHT))
+pygame.display.set_caption('Python Snake.io')
 clock = pygame.time.Clock()
-font = pygame.font.SysFont("Verdana", 24, bold=True)
 
-# --- GAME STATE ---
-world_x, world_y = WORLD_SIZE // 2, WORLD_SIZE // 2
-angle = 0
-base_speed = 4
-snake_len = 60
-path = []  # Stores (world_x, world_y)
-score = 0
-is_alive = True
-
-# Food & Particles
-foods = [[random.randint(0, WORLD_SIZE), random.randint(0, WORLD_SIZE)] for _ in range(50)]
-particles = []
-
-def draw_world_grid(cam_x, cam_y):
-    # Draw a grid that scrolls relative to the camera
-    spacing = 100
-    start_x = int(-cam_x % spacing)
-    start_y = int(-cam_y % spacing)
-    for x in range(start_x, WIDTH, spacing):
-        pygame.draw.line(screen, (20, 25, 45), (x, 0), (x, HEIGHT), 1)
-    for y in range(start_y, WIDTH, spacing):
-        pygame.draw.line(screen, (20, 25, 45), (0, y), (WIDTH, y), 1)
-
-def kill_player():
-    global is_alive
-    is_alive = False
-    for _ in range(30): # Explosion particles
-        particles.append([[world_x, world_y], [random.uniform(-10, 10), random.uniform(-10, 10)], 40])
-
-# --- MAIN LOOP ---
-while True:
-    screen.fill(BG_COLOR)
+def game_loop():
+    game_over = False
     
-    # Camera offset: This centers the snake head on the screen
-    cam_x = world_x - WIDTH // 2
-    cam_y = world_y - HEIGHT // 2
+   
+    x, y = WIDTH // 2, HEIGHT // 2
+    dx, dy = 0, 0
+    
+    snake_pixels = []
+    snake_length = 1
 
-    for event in pygame.event.get():
-        if event.type == pygame.QUIT:
-            pygame.quit(); exit()
-        if event.type == pygame.KEYDOWN and not is_alive:
-            # Reset Game
-            world_x, world_y = WORLD_SIZE // 2, WORLD_SIZE // 2
-            path, snake_len, score, is_alive = [], 60, 0, True
+ 
+    food_x = round(random.randrange(0, WIDTH - SNAKE_SIZE) / 20.0) * 20.0
+    food_y = round(random.randrange(0, HEIGHT - SNAKE_SIZE) / 20.0) * 20.0
 
-    if is_alive:
-        # 1. Controls & Speed
-        keys = pygame.key.get_pressed()
-        speed = base_speed * 2 if keys[pygame.K_SPACE] else base_speed
-        if keys[pygame.K_LEFT]: angle -= 0.08
-        if keys[pygame.K_RIGHT]: angle += 0.08
-
-        # 2. Movement
-        world_x += speed * math.cos(angle)
-        world_y += speed * math.sin(angle)
+    while not game_over:
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                pygame.quit()
+                quit()
         
-        # World Boundaries
-        if world_x < 0 or world_x > WORLD_SIZE or world_y < 0 or world_y > WORLD_SIZE:
-            kill_player()
+            if event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_LEFT and dx == 0:
+                    dx, dy = -SNAKE_SIZE, 0
+                elif event.key == pygame.K_RIGHT and dx == 0:
+                    dx, dy = SNAKE_SIZE, 0
+                elif event.key == pygame.K_UP and dy == 0:
+                    dx, dy = 0, -SNAKE_SIZE
+                elif event.key == pygame.K_DOWN and dy == 0:
+                    dx, dy = 0, SNAKE_SIZE
 
-        path.append((world_x, world_y))
-        if len(path) > snake_len: path.pop(0)
 
-        # 3. Self-Collision (Skip the first 20 segments to avoid hitting your own neck)
-        head_pos = (world_x, world_y)
-        for i, segment in enumerate(path[:-25]):
-            if math.hypot(head_pos[0] - segment[0], head_pos[1] - segment[1]) < 12:
-                kill_player()
+        if x >= WIDTH or x < 0 or y >= HEIGHT or y < 0:
+            game_over = True
 
-        # 4. Food Collection
-        for f in foods[:]:
-            if math.hypot(world_x - f[0], world_y - f[1]) < 30:
-                score += 10
-                snake_len += 15
-                foods.remove(f)
-                foods.append([random.randint(0, WORLD_SIZE), random.randint(0, WORLD_SIZE)])
+        x += dx
+        y += dy
+        screen.fill(BLACK)
 
-    # --- DRAWING ---
-    draw_world_grid(cam_x, cam_y)
+     
+        pygame.draw.rect(screen, RED, [food_x, food_y, SNAKE_SIZE, SNAKE_SIZE])
 
-    # Draw Food
-    for f in foods:
-        fx, fy = f[0] - cam_x, f[1] - cam_y
-        if -50 < fx < WIDTH + 50 and -50 < fy < HEIGHT + 50:
-            pygame.draw.circle(screen, FOOD_COLOR, (int(fx), int(fy)), 10)
-            pygame.draw.circle(screen, (255, 255, 255), (int(fx), int(fy)), 4)
+        
+        snake_pixels.append([x, y])
+        if len(snake_pixels) > snake_length:
+            del snake_pixels[0]
 
-    # Draw Snake
-    for i, p in enumerate(path[::4]):
-        sx, sy = p[0] - cam_x, p[1] - cam_y
-        size = 12 + math.sin(i * 0.3 + pygame.time.get_ticks() * 0.01) * 3
-        # Outline/Glow
-        pygame.draw.circle(screen, SNAKE_COLOR, (int(sx), int(sy)), int(size), 2)
-        # Core
-        color_val = min(255, 150 + i)
-        pygame.draw.circle(screen, (0, color_val, 200), (int(sx), int(sy)), int(size - 4))
+        
+        for pixel in snake_pixels[:-1]:
+            if pixel == [x, y]:
+                game_over = True
 
-    # Particles
-    for p in particles[:]:
-        p[0][0] += p[1][0]; p[0][1] += p[1][1]; p[2] -= 1
-        if p[2] <= 0: particles.remove(p)
-        else: pygame.draw.circle(screen, SNAKE_COLOR, (int(p[0][0]-cam_x), int(p[0][1]-cam_y)), 4)
+  
+        for pixel in snake_pixels:
+            pygame.draw.rect(screen, GREEN, [pixel[0], pixel[1], SNAKE_SIZE, SNAKE_SIZE])
 
-    # UI
-    txt = font.render(f"SCORE: {score}   {'SPACE TO BOOST' if is_alive else 'GAME OVER - PRESS ANY KEY'}", True, (255, 255, 255))
-    screen.blit(txt, (20, 20))
+        pygame.display.update()
 
-    pygame.display.flip()
-    clock.tick(FPS)
+        
+        if x == food_x and y == food_y:
+            food_x = round(random.randrange(0, WIDTH - SNAKE_SIZE) / 20.0) * 20.0
+            food_y = round(random.randrange(0, HEIGHT - SNAKE_SIZE) / 20.0) * 20.0
+            snake_length += 1
+
+        clock.tick(SPEED)
+
+   
+    print("Game Over!")
+    time.sleep(1)
+    game_loop()
+
+game_loop()
