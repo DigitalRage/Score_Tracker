@@ -32,8 +32,8 @@ def game_loop():
     snake_length = 1
 
  
-    food_x = round(random.randrange(0, WIDTH - SNAKE_SIZE) / 20.0) * 20.0
-    food_y = round(random.randrange(0, HEIGHT - SNAKE_SIZE) / 20.0) * 20.0
+    food_x = round(random.randrange(0, WIDTH - SNAKE_SIZE) / 20.0) * 100.0
+    food_y = round(random.randrange(0, HEIGHT - SNAKE_SIZE) / 20.0) * 100.0
 
     while not game_over:
         for event in pygame.event.get():
@@ -60,7 +60,7 @@ def game_loop():
         screen.fill(BLACK)
 
      
-        pygame.draw.rect(screen, RED, [food_x, food_y, SNAKE_SIZE, SNAKE_SIZE])
+        pygame.draw.circle(screen, RED, (int(food_x + SNAKE_SIZE), int(food_y + SNAKE_SIZE)), SNAKE_SIZE)
 
         
         snake_pixels.append([x, y])
@@ -74,8 +74,8 @@ def game_loop():
 
   
         for pixel in snake_pixels:
-            pygame.draw.rect(screen, GREEN, [pixel[0], pixel[1], SNAKE_SIZE, SNAKE_SIZE])
-
+            pygame.draw.circle(screen, GREEN, (pixel[0], pixel[1]), SNAKE_SIZE, SNAKE_SIZE)
+#pygame.draw.circle(screen, GREEN,(int(pixel[0],pixel[1]),SNAKE_SIZE, SNAKE_SIZE])
         pygame.display.update()
 
         
