@@ -42,7 +42,7 @@ class score:
             return rows
     #define read with peramater as game and will return that games dict
     def read(self,game):
-        for x in self.rows():
+        for x in self.rows:
             if game in x:
                 return x
     #define write with peramaters of game score and username and set the spisific games dict to the new valeu and update the csv file
