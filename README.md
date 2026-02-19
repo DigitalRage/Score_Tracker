@@ -6,7 +6,7 @@ Paragraph discription of your project
 
 ## How to use
 ***
-1. Spep by step instructions
+1. Step by step instructions
 2. Detailing how to run your project
 3. Install Pygame
 
