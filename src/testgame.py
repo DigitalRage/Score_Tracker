@@ -1,94 +1,105 @@
-#import pygame
-#import random
-#import time
-#
-#
-#pygame.init()
-#
-#
-#WIDTH, HEIGHT = 800, 600
-#SNAKE_SIZE = 20
-#SPEED = 10
-#
-#
-#WHITE = (255, 255, 255)
-#GREEN = (0, 255, 0)
-#RED = (213, 50, 80)
-#BLACK = (0, 0, 0)
-#
-#
-#screen = pygame.display.set_mode((WIDTH, HEIGHT))
-#pygame.display.set_caption('Python Snake.io')
-#clock = pygame.time.Clock()
-#
-#def game_loop():
-#    game_over = False
-#    
-#   
-#    x, y = WIDTH // 2, HEIGHT // 2
-#    dx, dy = 0, 0
-#    
-#    snake_pixels = []
-#    snake_length = 1
-#
-# 
-#    food_x = round(random.randrange(0, WIDTH - SNAKE_SIZE) / 20.0) * 100.0
-#    food_y = round(random.randrange(0, HEIGHT - SNAKE_SIZE) / 20.0) * 100.0
-#
-#    while not game_over:
-#        for event in pygame.event.get():
-#            if event.type == pygame.QUIT:
-#                pygame.quit()
-#                quit()
-#        
-#            if event.type == pygame.KEYDOWN:
-#                if event.key == pygame.K_LEFT and dx == 0:
-#                    dx, dy = -SNAKE_SIZE, 0
-#                elif event.key == pygame.K_RIGHT and dx == 0:
-#                    dx, dy = SNAKE_SIZE, 0
-#                elif event.key == pygame.K_UP and dy == 0:
-#                    dx, dy = 0, -SNAKE_SIZE
-#                elif event.key == pygame.K_DOWN and dy == 0:
-#                    dx, dy = 0, SNAKE_SIZE
-#
-#
-#        if x >= WIDTH or x < 0 or y >= HEIGHT or y < 0:
-#            game_over = True
-#
-#        x += dx
-#        y += dy
-#        screen.fill(BLACK)
-#
-#     
-#        pygame.draw.circle(screen, RED, (int(food_x + SNAKE_SIZE), int(food_y + SNAKE_SIZE)), SNAKE_SIZE)
-#
-#        
-#        snake_pixels.append([x, y])
-#        if len(snake_pixels) > snake_length:
-#            del snake_pixels[0]
-#
-#        
-#        for pixel in snake_pixels[:-1]:
-#            if pixel == [x, y]:
-#                game_over = True
-#
-#  
-#        for pixel in snake_pixels:
-#            pygame.draw.circle(screen, GREEN, (pixel[0], pixel[1]), SNAKE_SIZE, SNAKE_SIZE)
-##pygame.draw.circle(screen, GREEN,(int(pixel[0],pixel[1]),SNAKE_SIZE, SNAKE_SIZE])
-#        pygame.display.update()
-#
-#        
-#        if x == food_x and y == food_y:
-#            food_x = round(random.randrange(0, WIDTH - SNAKE_SIZE) / 20.0) * 20.0
-#            food_y = round(random.randrange(0, HEIGHT - SNAKE_SIZE) / 20.0) * 20.0
-#            snake_length += 1
-#
-#        clock.tick(SPEED)
-#
-#   
-#    print("Game Over!")
-#    time.sleep(1)
-#    game_loop()
-#
-#game_loop()
+import pygame
+import random
+import time
+
+pygame.init()
+
+WIDTH, HEIGHT = 800, 600
+SNAKE_SIZE = 20
+SPEED = 10
+
+WHITE = (255, 255, 255)
+GREEN = (0, 255, 0)
+RED = (213, 50, 80)
+BLACK = (0, 0, 0)
+
+screen = pygame.display.set_mode((WIDTH, HEIGHT))
+pygame.display.set_caption('Python Snake.io')
+clock = pygame.time.Clock()
+font = pygame.font.SysFont("comicsansms", 25)
+
+
+def game_loop():
+    game_over = False
+
+
+    x = WIDTH // 2
+    y = HEIGHT // 2
+    jx1dx1 = SNAKE_SIZE
+    dy1dy1 = 0
+
+    snake_pixels = [[x, y]]
+    score = 0
+
+
+    XFOOD = random.randrange(0, WIDTH // SNAKE_SIZE) * SNAKE_SIZE
+    YFOOD = random.randrange(0, HEIGHT // SNAKE_SIZE) * SNAKE_SIZE
+
+    while not game_over:
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                pygame.quit()
+                quit()
+
+            if event.type == pygame.KEYDOWN:
+                
+                if event.key == pygame.K_LEFT and jx1dx1 != SNAKE_SIZE:
+                    jx1dx1, dy1dy1 = -SNAKE_SIZE, 0
+                elif event.key == pygame.K_RIGHT and jx1dx1 != -SNAKE_SIZE:
+                    jx1dx1, dy1dy1 = SNAKE_SIZE, 0
+                elif event.key == pygame.K_UP and dy1dy1 != SNAKE_SIZE:
+                    jx1dx1, dy1dy1 = 0, -SNAKE_SIZE
+                elif event.key == pygame.K_DOWN and dy1dy1 != -SNAKE_SIZE:
+                    jx1dx1, dy1dy1 = 0, SNAKE_SIZE
+
+       
+        x += jx1dx1
+        y += dy1dy1
+
+        
+        if x < 0 or x >= WIDTH or y < 0 or y >= HEIGHT:
+            game_over = True
+
+        
+        head = [x, y]
+        snake_pixels.append(head)
+
+        
+        if x == XFOOD and y == YFOOD:
+            XFOOD = random.randrange(0, WIDTH // SNAKE_SIZE) * SNAKE_SIZE
+            YFOOD = random.randrange(0, HEIGHT // SNAKE_SIZE) * SNAKE_SIZE
+            score += 1000
+        else:
+            snake_pixels.pop(0)  
+
+        if head in snake_pixels[:-1]:
+            game_over = True
+
+     
+        screen.fill(BLACK)
+
+        for px, py in snake_pixels:
+            center = (px + SNAKE_SIZE // 2, py + SNAKE_SIZE // 2)
+            pygame.draw.circle(screen, GREEN, center, SNAKE_SIZE // 2)
+
+        food_center = (XFOOD + SNAKE_SIZE // 2, YFOOD + SNAKE_SIZE // 2)
+        pygame.draw.circle(screen, RED, food_center, SNAKE_SIZE // 2)
+
+   
+        score_text = font.render(f"Score: {score}", True, WHITE)
+        screen.blit(score_text, (10, 10))
+
+        pygame.display.update()
+        clock.tick(SPEED)
+
+
+    screen.fill(BLACK)
+    over_text = font.render("Game Over!", True, RED)
+    final_score = font.render(f"Final Score: {score}", True, WHITE)
+    screen.blit(over_text, (WIDTH // 2 - over_text.get_width() // 2, HEIGHT // 2 - 60))
+    screen.blit(final_score, (WIDTH // 2 - final_score.get_width() // 2, HEIGHT // 2))
+    pygame.display.update()
+    time.sleep(2)
+
+while True:
+    game_loop()
