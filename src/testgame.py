@@ -25,8 +25,8 @@ def game_loop():
 
     x = WIDTH // 2
     y = HEIGHT // 2
-    jx1dx1 = SNAKE_SIZE
-    dy1dy1 = 0
+    x_axis = SNAKE_SIZE
+    Y_axis = 0
 
     snake_pixels = [[x, y]]
     score = 0
@@ -43,18 +43,18 @@ def game_loop():
 
             if event.type == pygame.KEYDOWN:
                 
-                if event.key == pygame.K_LEFT and jx1dx1 != SNAKE_SIZE:
-                    jx1dx1, dy1dy1 = -SNAKE_SIZE, 0
-                elif event.key == pygame.K_RIGHT and jx1dx1 != -SNAKE_SIZE:
-                    jx1dx1, dy1dy1 = SNAKE_SIZE, 0
-                elif event.key == pygame.K_UP and dy1dy1 != SNAKE_SIZE:
-                    jx1dx1, dy1dy1 = 0, -SNAKE_SIZE
-                elif event.key == pygame.K_DOWN and dy1dy1 != -SNAKE_SIZE:
-                    jx1dx1, dy1dy1 = 0, SNAKE_SIZE
+                if event.key == pygame.K_LEFT and x_axis != SNAKE_SIZE:
+                    x_axis, Y_axis = -SNAKE_SIZE, 0
+                elif event.key == pygame.K_RIGHT and x_axis != -SNAKE_SIZE:
+                    x_axis, Y_axis = SNAKE_SIZE, 0
+                elif event.key == pygame.K_UP and Y_axis != SNAKE_SIZE:
+                    x_axis, Y_axis = 0, -SNAKE_SIZE
+                elif event.key == pygame.K_DOWN and Y_axis != -SNAKE_SIZE:
+                    x_axis, Y_axis = 0, SNAKE_SIZE
 
        
-        x += jx1dx1
-        y += dy1dy1
+        x += x_axis
+        y += Y_axis
 
         
         if x < 0 or x >= WIDTH or y < 0 or y >= HEIGHT:
@@ -68,7 +68,7 @@ def game_loop():
         if x == XFOOD and y == YFOOD:
             XFOOD = random.randrange(0, WIDTH // SNAKE_SIZE) * SNAKE_SIZE
             YFOOD = random.randrange(0, HEIGHT // SNAKE_SIZE) * SNAKE_SIZE
-            score += 1000
+            score += 10
         else:
             snake_pixels.pop(0)  
 
