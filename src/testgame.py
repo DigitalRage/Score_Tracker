@@ -94,9 +94,9 @@ def game_loop():
 
 
     screen.fill(BLACK)
-    over_text = font.render("Game Over!", True, RED)
+    GameOver_text = font.render("Game Over!", True, RED)
     final_score = font.render(f"Final Score: {score}", True, WHITE)
-    screen.blit(over_text, (WIDTH // 2 - over_text.get_width() // 2, HEIGHT // 2 - 60))
+    screen.blit(GameOver_text, (WIDTH // 2 - GameOver_text.get_width() // 2, HEIGHT // 2 - 60))
     screen.blit(final_score, (WIDTH // 2 - final_score.get_width() // 2, HEIGHT // 2))
     pygame.display.update()
     time.sleep(2)
