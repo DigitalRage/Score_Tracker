@@ -3,18 +3,25 @@ import user_management
 import score_management
 import sys
 import random
+import csv
+USERS_FILE = 'high_scores.csv'
 
 def main():
     try:
         user = None
         while not user:
-            choice = input("Enter 'r' to register, 'l' to login, or 'q' to quit: ").lower()
+            choice = input("Enter 'r' to register, 'l' to login, 'q' to quit or 'v' to view scores").lower()
             if choice == 'r':
                 user = user_management.register()
             elif choice == 'l':
                 user = user_management.login()
             elif choice == 'q':
                 sys.exit(0)
+            elif choice == 'v':
+                with open(USERS_FILE, 'r', newline='') as f:
+                    reader = csv.reader(f)
+                    for row in reader:
+                        print(", ".join(row))
             else:
                 print("Invalid choice. Try again.")
 
