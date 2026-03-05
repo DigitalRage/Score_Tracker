@@ -27,38 +27,22 @@ import pygame
 import random
 import time
 
-
-
-
-
 def play_game():
     pygame.init()
     WIDTH, HEIGHT = 800, 600
     SNAKE_SIZE = 20
     SPEED = 10
-    
-    screen = pygame.display.set_mode((WIDTH,HEIGHT))
-    pygame.display.set_caption("Pygame Screen Example") 
 
     WHITE = (255, 255, 255)
     GREEN = (0, 255, 0)
     RED = (213, 50, 80)
     BLACK = (0, 0, 0)
-depth_input = screen.textinput(
-    "Recursion amount",
-    "Change the amount of recursion\nLeave blank for default: 4"
-)
-if depth_input is None or depth_input.strip == "":
-    play_game()
-else:
-    try:
-
-
 
     screen = pygame.display.set_mode((WIDTH, HEIGHT))
     pygame.display.set_caption('Python Snake.io')
     clock = pygame.time.Clock()
     font = pygame.font.SysFont("comicsansms", 25)
+
 
     x = WIDTH // 2
     y = HEIGHT // 2
@@ -97,7 +81,7 @@ else:
         snake_pixels.append(head)
 
         if x == food_x and y == food_y:
-            
+        
             while [food_x, food_y] in snake_pixels:
                 food_x = random.randrange(0, WIDTH // SNAKE_SIZE) * SNAKE_SIZE
                 food_y = random.randrange(0, HEIGHT // SNAKE_SIZE) * SNAKE_SIZE
@@ -122,6 +106,7 @@ else:
         pygame.display.update()
         clock.tick(SPEED)
 
+    
     screen.fill(BLACK)
     game_over_text = font.render("Game Over!", True, RED)
     final_score_text = font.render(f"Final Score: {score}", True, WHITE)
