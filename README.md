@@ -18,7 +18,8 @@ Install Pygame by typing "pip install pygame" in your terminal.
 ## Details on Project features
 ***
 - 🙀Tracks score of any game with demo file included!🙀
-- 
+- 🐍Play classic snake in Python!🐍
+- 🖍️CSV file with all scores. Edit to cheat!🖍️
 
 ## Licence
 ***
