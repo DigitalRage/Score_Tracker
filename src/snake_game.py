@@ -43,7 +43,6 @@ def play_game():
     clock = pygame.time.Clock()
     font = pygame.font.SysFont("comicsansms", 25)
 
-
     x = WIDTH // 2
     y = HEIGHT // 2
     x_change = SNAKE_SIZE  
@@ -81,7 +80,7 @@ def play_game():
         snake_pixels.append(head)
 
         if x == food_x and y == food_y:
-        
+           
             while [food_x, food_y] in snake_pixels:
                 food_x = random.randrange(0, WIDTH // SNAKE_SIZE) * SNAKE_SIZE
                 food_y = random.randrange(0, HEIGHT // SNAKE_SIZE) * SNAKE_SIZE
