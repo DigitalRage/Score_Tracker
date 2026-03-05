@@ -26,6 +26,7 @@ Install Pygame by typing "pip install pygame" in your terminal.
 Anything made for school has no copyright
 
 ## Contributers
+***
 - chronin7
 - DigitalRage
 - richmondmason-bit
