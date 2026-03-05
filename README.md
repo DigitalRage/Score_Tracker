@@ -6,25 +6,29 @@ Paragraph discription of your project
 
 ## How to use
 ***
-1. Step by step instructions
-2. Detailing how to run your project
-3. Install Pygame
+1. Download zip from github by pressing "code," then pressing "local," then lastly, pressing download zip. 
+2. Extract zip file
+3. Open VScode and open the folder called "Score_Tracker."
+4. Run file by opening main
+5. Press "Run Python File."
+
+## Install Dependencies
+Install Pygame by typing "pip install pygame" in ypur terminal. 
 
 ## Details on Project features
 ***
-- ALL key features in your repository with a detailed discription
-- This is a list frequently will include emojis
-
-## Instalation Instructions 
-Notes being used in this class BUT if you have a full run file (.exe) for your project, this is where setup instructions go! 
+- 🙀Tracks score of any game with demo file included!🙀
+- 
 
 ## Licence
 ***
-Anything made for school has bo copyright
+Anything made for school has no copyright
 
 ## Contributers
-- github usernames for ALL members of the group
+- chronin7
+- DigitalRage
+- richmondmason-bit
 
 ## Contribute
 ***
-Not being used for this class. Instructions for how to submit a change to the repository if it is open source.  
+This is a project that is open to other users. If you want to make a copy and add features of your own, feel free. 
