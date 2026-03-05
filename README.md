@@ -13,7 +13,7 @@ Paragraph discription of your project
 5. Press "Run Python File."
 
 ## Install Dependencies
-Install Pygame by typing "pip install pygame" in ypur terminal. 
+Install Pygame by typing "pip install pygame" in your terminal. 
 
 ## Details on Project features
 ***
